@@ -206,14 +206,14 @@ $page_title = $page_title ?? 'Dashboard';
                         </a>
                     </li>
                     
-                    <?php if ($_SESSION['role'] === 'owner'): ?>
+                    
                     <li>
                         <a href="/inventory.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'inventory.php' ? 'active' : ''; ?>">
                             <i class="fas fa-boxes w-5"></i>
                             <span>Stock Management</span>
                         </a>
                     </li>
-                    <?php endif; ?>
+                    
                     
                     <li class="pt-4">
                         <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Transactions</p>
@@ -226,14 +226,14 @@ $page_title = $page_title ?? 'Dashboard';
                         </a>
                     </li>
                     
-                    <?php if ($_SESSION['role'] === 'owner'): ?>
+                    
                     <li>
                         <a href="/expenses.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'expenses.php' ? 'active' : ''; ?>">
                             <i class="fas fa-money-bill-wave w-5"></i>
                             <span>Expenses</span>
                         </a>
                     </li>
-                    
+                    <?php if ($_SESSION['role'] === 'owner'): ?>
                     <li class="pt-4">
                         <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Analytics</p>
                     </li>
