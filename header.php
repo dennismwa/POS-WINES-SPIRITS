@@ -221,6 +221,35 @@ $page_title = $page_title ?? 'Dashboard';
                             <span>Stock Audit Trail</span>
                         </a>
                     </li>
+                    <!-- ADD THIS TO THE NAVIGATION SECTION IN header.php -->
+<!-- After the "Inventory" section and before "Transactions" section -->
+
+<?php if ($_SESSION['role'] === 'owner'): ?>
+<li class="pt-4">
+    <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Multi-Store</p>
+</li>
+
+<li>
+    <a href="/branches.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'branches.php' ? 'active' : ''; ?>">
+        <i class="fas fa-store w-5"></i>
+        <span>Branch Management</span>
+    </a>
+</li>
+
+<li>
+    <a href="/branch-comparison.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'branch-comparison.php' ? 'active' : ''; ?>">
+        <i class="fas fa-chart-line w-5"></i>
+        <span>Branch Comparison</span>
+    </a>
+</li>
+
+<li>
+    <a href="/stock-transfers.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'stock-transfers.php' ? 'active' : ''; ?>">
+        <i class="fas fa-exchange-alt w-5"></i>
+        <span>Stock Transfers</span>
+    </a>
+</li>
+<?php endif; ?>
                     <?php endif; ?>
                     
                     <li class="pt-2 md:pt-4">
