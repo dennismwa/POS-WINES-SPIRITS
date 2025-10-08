@@ -1084,20 +1084,25 @@ function addToCart(product) {
     if (existingItem) {
         if (existingItem.quantity < product.stock_quantity) {
             existingItem.quantity++;
-            showNotification(`Added another ${product.name}`, 'success');
+            showNotification(`Added another ${product.name} (Qty: ${existingItem.quantity})`, 'success');
         } else {
-            showNotification('Insufficient stock', 'error');
+            showNotification(`Only ${product.stock_quantity} units available`, 'error');
             return;
         }
     } else {
+        if (product.stock_quantity <= 0) {
+            showNotification(`${product.name} is out of stock`, 'error');
+            return;
+        }
+        
         cart.push({
-            id: product.id,
-            name: product.name,
+            id: parseInt(product.id),
+            name: String(product.name),
             price: parseFloat(product.selling_price),
             quantity: 1,
-            stock: product.stock_quantity
+            stock: parseInt(product.stock_quantity)
         });
-        showNotification(`Added ${product.name} to cart`, 'success');
+        showNotification(`${product.name} added to cart`, 'success');
     }
     
     updateCart();
@@ -1136,17 +1141,17 @@ function updateCart() {
                             <p class="text-xs text-gray-600">${settings.currency} ${item.price.toFixed(0)} each</p>
                         </div>
                     </div>
-                    <button onclick="removeFromCart(${item.id}); event.stopPropagation();" class="text-red-500 hover:text-red-700 transition ml-2 flex-shrink-0">
+                    <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 transition ml-2 flex-shrink-0">
                         <i class="fas fa-times-circle text-base"></i>
                     </button>
                 </div>
                 <div class="flex items-center justify-between bg-gray-50 rounded-lg p-2">
                     <div class="flex items-center gap-2">
-                        <button onclick="updateQuantity(${item.id}, -1); event.stopPropagation();" class="qty-btn bg-red-500 hover:bg-red-600 text-white">
+                        <button onclick="updateQuantity(${item.id}, -1)" class="qty-btn bg-red-500 hover:bg-red-600 text-white">
                             <i class="fas fa-minus"></i>
                         </button>
                         <span class="qty-value">${item.quantity}</span>
-                        <button onclick="updateQuantity(${item.id}, 1); event.stopPropagation();" class="qty-btn bg-green-500 hover:bg-green-600 text-white">
+                        <button onclick="updateQuantity(${item.id}, 1)" class="qty-btn bg-green-500 hover:bg-green-600 text-white">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
@@ -1164,24 +1169,33 @@ function updateCart() {
 
 function updateQuantity(productId, change) {
     const item = cart.find(i => i.id === productId);
-    if (!item) return;
+    if (!item) {
+        return;
+    }
     
     const newQuantity = item.quantity + change;
     
     if (newQuantity <= 0) {
         removeFromCart(productId);
-    } else if (newQuantity <= item.stock) {
-        item.quantity = newQuantity;
-        updateCart();
-    } else {
-        showNotification('Insufficient stock', 'error');
+        return;
     }
+    
+    if (newQuantity > item.stock) {
+        showNotification(`Only ${item.stock} units available in stock`, 'error');
+        return;
+    }
+    
+    item.quantity = newQuantity;
+    updateCart();
 }
 
 function removeFromCart(productId) {
+    const item = cart.find(i => i.id === productId);
+    const itemName = item ? item.name : 'Item';
+    
     cart = cart.filter(item => item.id !== productId);
     updateCart();
-    showNotification('Item removed', 'info');
+    showNotification(`${itemName} removed from cart`, 'info');
 }
 
 function clearCart() {
@@ -1490,18 +1504,15 @@ function completeSale() {
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
     
-    // Create FormData with all required fields
-    const formData = new FormData();
-    
-    // Convert cart items to proper format
     const saleItems = cart.map(item => ({
         id: parseInt(item.id),
-        name: item.name,
+        name: String(item.name),
         price: parseFloat(item.price),
         quantity: parseInt(item.quantity),
         discount: 0
     }));
     
+    const formData = new FormData();
     formData.append('items', JSON.stringify(saleItems));
     formData.append('subtotal', subtotal.toFixed(2));
     formData.append('tax_amount', tax.toFixed(2));
@@ -1511,44 +1522,41 @@ function completeSale() {
     formData.append('change_amount', (amountPaid - total).toFixed(2));
     formData.append('discount_amount', '0.00');
     formData.append('notes', '');
+    formData.append('mpesa_reference', selectedPaymentMethod === 'mpesa' ? document.getElementById('mpesaReference').value.trim() : '');
     
-    if (selectedPaymentMethod === 'mpesa') {
-        formData.append('mpesa_reference', document.getElementById('mpesaReference').value.trim());
-    }
-    
-    fetch('/api/complete-sale.php', {
+    fetch('api/complete-sale.php', {
         method: 'POST',
         body: formData
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(response => response.text())
+    .then(text => {
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            throw new Error('Server returned invalid response');
+        }
+        
         if (data.success) {
             showNotification('Sale completed successfully!', 'success');
-            
-            // Clear cart
             cart = [];
             updateCart();
             closePaymentModal();
             
-            // Remove from drafts if it was loaded from one
             if (currentDraftId) {
                 deleteDraft(currentDraftId, false);
                 currentDraftId = null;
             }
             
-            // Show success message with receipt option
-            const message = `Sale completed!\n\nSale #${data.data.sale_number}\nTotal: ${settings.currency} ${parseFloat(data.data.total).toFixed(2)}\nChange: ${settings.currency} ${parseFloat(data.data.change).toFixed(2)}\n\nPrint receipt?`;
-            
-            if (confirm(message)) {
-                window.open(`/receipt.php?id=${data.data.sale_id}`, '_blank');
+            if (confirm(`Sale completed!\n\nSale #${data.data.sale_number}\nTotal: ${settings.currency} ${parseFloat(data.data.total).toFixed(2)}\nChange: ${settings.currency} ${parseFloat(data.data.change).toFixed(2)}\n\nPrint receipt?`)) {
+                window.open(`receipt.php?id=${data.data.sale_id}`, '_blank');
             }
         } else {
             showNotification(data.message || 'Failed to complete sale', 'error');
         }
     })
-    .catch(err => {
+    .catch(error => {
         showNotification('Connection error. Please try again.', 'error');
-        console.error('Fetch error:', err);
     })
     .finally(() => {
         btn.disabled = false;
@@ -1582,7 +1590,6 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Add CSS for animations
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideIn {
@@ -1609,7 +1616,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Keyboard shortcuts
 document.addEventListener('keydown', function(e) {
     if (e.key === 'F2') {
         e.preventDefault();
@@ -1646,12 +1652,10 @@ document.getElementById('barcodeInput').addEventListener('keypress', function(e)
     }
 });
 
-// Handle window resize
 let resizeTimer;
 window.addEventListener('resize', function() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function() {
-        // Close cart on desktop when resizing from mobile
         if (window.innerWidth >= 1024) {
             const cartSection = document.getElementById('cartSection');
             cartSection.classList.remove('cart-open');
