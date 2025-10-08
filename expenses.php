@@ -1,6 +1,6 @@
 <?php
 require_once 'config.php';
-requireOwner();
+requireAuth();
 
 $page_title = 'Expense Management';
 $settings = getSettings();
@@ -961,3 +961,4 @@ document.addEventListener('keydown', function(e) {
 </style>
 
 <?php include 'footer.php'; ?>
+
