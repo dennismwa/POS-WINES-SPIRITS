@@ -1,6 +1,6 @@
 <?php
 require_once 'config.php';
-requireOwner();
+requireAuth();
 
 $page_title = 'Stock Management';
 $settings = getSettings();
@@ -512,5 +512,6 @@ document.addEventListener('keydown', function(e) {
     }
 }
 </style>
+
 
 <?php include 'footer.php'; ?>
