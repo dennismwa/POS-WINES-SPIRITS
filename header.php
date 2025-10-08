@@ -152,113 +152,121 @@ $page_title = $page_title ?? 'Dashboard';
     <aside class="sidebar fixed left-0 top-0 h-screen w-64">
         <div class="flex flex-col h-full">
             <!-- Logo Section -->
-            <div class="p-6 border-b border-gray-700">
+            <div class="p-4 md:p-6 border-b border-gray-700">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                            <i class="fas fa-wine-bottle text-white text-xl"></i>
+                    <div class="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+                        <div class="w-8 h-8 md:w-10 md:h-10 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-wine-bottle text-white text-base md:text-xl"></i>
                         </div>
-                        <div>
-                            <h2 class="font-bold text-lg text-white leading-tight"><?php echo htmlspecialchars($settings['company_name']); ?></h2>
-                            <p class="text-xs text-gray-400"><?php echo htmlspecialchars($_SESSION['user_name']); ?></p>
+                        <div class="min-w-0 flex-1">
+                            <h2 class="font-bold text-sm md:text-lg text-white leading-tight truncate"><?php echo htmlspecialchars($settings['company_name']); ?></h2>
+                            <p class="text-xs text-gray-400 truncate"><?php echo htmlspecialchars($_SESSION['user_name']); ?></p>
                         </div>
                     </div>
-                    <button id="closeSidebar" class="md:hidden text-gray-400 hover:text-white">
+                    <button id="closeSidebar" class="md:hidden text-gray-400 hover:text-white flex-shrink-0 ml-2">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
             </div>
 
             <!-- Navigation -->
-            <nav class="flex-1 overflow-y-auto p-4">
-                <ul class="space-y-1">
+            <nav class="flex-1 overflow-y-auto p-3 md:p-4">
+                <ul class="space-y-0.5 md:space-y-1">
                     <?php if ($_SESSION['role'] === 'owner'): ?>
                     <li>
-                        <a href="/dashboard.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'dashboard.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-chart-line w-5"></i>
+                        <a href="/dashboard.php" class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-gray-300 transition text-sm md:text-base <?php echo basename($_SERVER['PHP_SELF']) === 'dashboard.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-chart-line w-4 md:w-5"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <?php endif; ?>
                     
                     <li>
-                        <a href="/pos.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'pos.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-cash-register w-5"></i>
+                        <a href="/pos.php" class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-gray-300 transition text-sm md:text-base <?php echo basename($_SERVER['PHP_SELF']) === 'pos.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-cash-register w-4 md:w-5"></i>
                             <span>Point of Sale</span>
                         </a>
                     </li>
                     
-                    <li class="pt-4">
-                        <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Inventory</p>
+                    <li class="pt-2 md:pt-4">
+                        <p class="px-3 md:px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 md:mb-2">Inventory</p>
                     </li>
                     
                     <li>
-                        <a href="/products.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'products.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-wine-bottle w-5"></i>
+                        <a href="/products.php" class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-gray-300 transition text-sm md:text-base <?php echo basename($_SERVER['PHP_SELF']) === 'products.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-wine-bottle w-4 md:w-5"></i>
                             <span>Products</span>
                         </a>
                     </li>
                     
                     <li>
-                        <a href="/categories.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'categories.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-tags w-5"></i>
+                        <a href="/categories.php" class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-gray-300 transition text-sm md:text-base <?php echo basename($_SERVER['PHP_SELF']) === 'categories.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-tags w-4 md:w-5"></i>
                             <span>Categories</span>
                         </a>
                     </li>
                     
                     
                     <li>
-                        <a href="/inventory.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'inventory.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-boxes w-5"></i>
+                        <a href="/inventory.php" class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-gray-300 transition text-sm md:text-base <?php echo basename($_SERVER['PHP_SELF']) === 'inventory.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-boxes w-4 md:w-5"></i>
                             <span>Stock Management</span>
                         </a>
                     </li>
                     
+                    <?php if ($_SESSION['role'] === 'owner'): ?>
+                    <li>
+                        <a href="/stock-movements.php" class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-gray-300 transition text-sm md:text-base <?php echo basename($_SERVER['PHP_SELF']) === 'stock-movements.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-history w-4 md:w-5"></i>
+                            <span>Stock Audit Trail</span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
                     
-                    <li class="pt-4">
-                        <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Transactions</p>
+                    <li class="pt-2 md:pt-4">
+                        <p class="px-3 md:px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 md:mb-2">Transactions</p>
                     </li>
                     
                     <li>
-                        <a href="/sales.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'sales.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-receipt w-5"></i>
+                        <a href="/sales.php" class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-gray-300 transition text-sm md:text-base <?php echo basename($_SERVER['PHP_SELF']) === 'sales.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-receipt w-4 md:w-5"></i>
                             <span>Sales History</span>
                         </a>
                     </li>
                     
                     
                     <li>
-                        <a href="/expenses.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'expenses.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-money-bill-wave w-5"></i>
+                        <a href="/expenses.php" class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-gray-300 transition text-sm md:text-base <?php echo basename($_SERVER['PHP_SELF']) === 'expenses.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-money-bill-wave w-4 md:w-5"></i>
                             <span>Expenses</span>
                         </a>
                     </li>
                     <?php if ($_SESSION['role'] === 'owner'): ?>
-                    <li class="pt-4">
-                        <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Analytics</p>
+                    <li class="pt-2 md:pt-4">
+                        <p class="px-3 md:px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 md:mb-2">Analytics</p>
                     </li>
                     
                     <li>
-                        <a href="/reports.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'reports.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-chart-bar w-5"></i>
+                        <a href="/reports.php" class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-gray-300 transition text-sm md:text-base <?php echo basename($_SERVER['PHP_SELF']) === 'reports.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-chart-bar w-4 md:w-5"></i>
                             <span>Reports</span>
                         </a>
                     </li>
                     
-                    <li class="pt-4">
-                        <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Settings</p>
+                    <li class="pt-2 md:pt-4">
+                        <p class="px-3 md:px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 md:mb-2">Settings</p>
                     </li>
                     
                     <li>
-                        <a href="/users.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'users.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-users w-5"></i>
+                        <a href="/users.php" class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-gray-300 transition text-sm md:text-base <?php echo basename($_SERVER['PHP_SELF']) === 'users.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-users w-4 md:w-5"></i>
                             <span>Users</span>
                         </a>
                     </li>
                     
                     <li>
-                        <a href="/settings.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 transition <?php echo basename($_SERVER['PHP_SELF']) === 'settings.php' ? 'active' : ''; ?>">
-                            <i class="fas fa-cog w-5"></i>
+                        <a href="/settings.php" class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-gray-300 transition text-sm md:text-base <?php echo basename($_SERVER['PHP_SELF']) === 'settings.php' ? 'active' : ''; ?>">
+                            <i class="fas fa-cog w-4 md:w-5"></i>
                             <span>System Settings</span>
                         </a>
                     </li>
@@ -267,18 +275,18 @@ $page_title = $page_title ?? 'Dashboard';
             </nav>
 
             <!-- User Profile & Logout -->
-            <div class="p-4 border-t border-gray-700">
-                <div class="flex items-center gap-3 mb-3 p-3 bg-gray-800 rounded-lg">
-                    <div class="user-avatar w-10 h-10 rounded-full flex items-center justify-center text-white font-bold">
+            <div class="p-3 md:p-4 border-t border-gray-700">
+                <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3 p-2 md:p-3 bg-gray-800 rounded-lg">
+                    <div class="user-avatar w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-white font-bold text-sm md:text-base flex-shrink-0">
                         <?php echo strtoupper(substr($_SESSION['user_name'], 0, 1)); ?>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-sm font-semibold text-white truncate"><?php echo htmlspecialchars($_SESSION['user_name']); ?></p>
+                        <p class="text-xs md:text-sm font-semibold text-white truncate"><?php echo htmlspecialchars($_SESSION['user_name']); ?></p>
                         <p class="text-xs text-gray-400 capitalize"><?php echo htmlspecialchars($_SESSION['role']); ?></p>
                     </div>
                 </div>
-                <a href="/logout.php" class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500 hover:bg-opacity-10 transition">
-                    <i class="fas fa-sign-out-alt w-5"></i>
+                <a href="/logout.php" class="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-lg text-red-400 hover:bg-red-500 hover:bg-opacity-10 transition text-sm md:text-base">
+                    <i class="fas fa-sign-out-alt w-4 md:w-5"></i>
                     <span>Logout</span>
                 </a>
             </div>
